@@ -1,0 +1,54 @@
+<div class="login">
+    <el-row :gutter="10">
+        <el-col>
+            <div class="grid-content" :xs="{padding:17}"></div>
+        </el-col>
+        <el-col :xs="{span:24,offset:0}" :sm="{span:16,offset:4}" :md="{span:12,offset:6}">
+            <div class="grid-content bg-purple-light login-box">
+                <h1>登入</h1>
+                <el-form>
+                    <el-form-item>
+                        <el-input type="text" v-model="username" placeholder="username" clearable />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input type="password" v-model="password" placeholder="Password" clearable />
+                    </el-form-item>
+                    <div style="color: crimson;">
+                        {{login_message}}
+                    </div>
+
+                    <br />
+                    <br />
+                    <el-button plain v-on:click="loginHandler">玩家登入</el-button>
+                    <el-button plain v-on:click="signUpModalHandler">創建玩家</el-button>
+                </el-form>
+            </div>
+        </el-col>
+        <el-col>
+            <div class="grid-content"></div>
+        </el-col>
+    </el-row>
+    <Signup name="signup" height="400">
+        <h1>創建玩家</h1>
+        <br />
+        <el-form>
+            <el-form-item>
+                <el-input type="text" class="signup_input_box" v-model="signup_username" placeholder="Username" clearable />
+            </el-form-item>
+            <el-form-item>
+                <el-input type="text" class="signup_input_box" v-model="signup_nickname" placeholder="Nickname" clearable />
+            </el-form-item>
+            <el-form-item>
+                <el-input type="password" class="signup_input_box" v-model="signup_password" placeholder="Password" clearable />
+            </el-form-item>
+            <div style="color: crimson;">
+                {{signup_message}}
+            </div>
+            <br />
+            <el-button plain v-on:click="signUpHandler">創建</el-button>
+            <br />
+        </el-form>
+    </Signup>
+
+</div>
+</div>

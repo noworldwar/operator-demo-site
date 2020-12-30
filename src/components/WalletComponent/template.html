@@ -1,0 +1,28 @@
+<div class="wallet">
+    <p>
+        username: {{ username }}
+    </p>
+    <p>
+        balance:
+    </p>
+    <p>
+
+    <table class="table center" v-if="balance.data">
+        <thead>
+            <tr>
+                <th>bank</th>
+                <th>balance</th>
+                <!-- and so on -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item, idx) in balance.data">
+                <td>{{ item.bank }}</td>
+                <td>{{ item.balance }}</td>
+                <!-- and so on -->
+            </tr>
+        </tbody>
+    </table>
+
+    </p>
+</div>
