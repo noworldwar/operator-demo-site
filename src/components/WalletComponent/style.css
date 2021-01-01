@@ -1,3 +1,18 @@
 .wallet{
     margin-top: 10px;
 }
+
+.updateButton{
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.itemBank{
+    float: left;
+}
+
+.itemBalance{
+    float: right; 
+    color: #8492a6; 
+    font-size: 13px;
+}
