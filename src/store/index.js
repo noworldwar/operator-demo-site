@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import router from '../router'
+// import router from '../router'
 Vue.use(Vuex)
 
 const user = JSON.parse(sessionStorage.getItem('user'))
@@ -11,12 +11,12 @@ export default new Vuex.Store({
   mutations: {
     loginSuccess(state){
       state.status = {loggedIn:true};
-      router.push('/')
+      // router.push('/')
     },
     logout(state) {
       state.status = {loggedIn:false};
-      sessionStorage.clear()
-      router.push('/login')
+      sessionStorage.clear();
+      // router.push('/login')
     }
   },
   actions: {

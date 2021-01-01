@@ -22,7 +22,7 @@ export default {
       logoutRequest: function() {
           this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
           this.$store.commit("logout");
-          // this.$router.push({path: '/login'})
+          this.$router.push({path: '/'})
       }
   }
 };

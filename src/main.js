@@ -11,7 +11,7 @@ import vmodal from 'vue-js-modal'
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueCookies)
-Vue.use(vmodal, { componentName: 'Signup' })
+Vue.use(vmodal, { componentName: 'Vmodal' })
 
 new Vue({
   router,

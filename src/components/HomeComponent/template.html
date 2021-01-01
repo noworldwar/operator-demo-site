@@ -1,6 +1,59 @@
 <div class="hello">
-  <h1>{{ msg }}</h1>
-  <p>
-    Hello {{ username }}!
-  </p>
+  <body>
+    <div class="container">
+      <div class="title">
+        <h2>Game Lobby</h2>
+        <div>
+          <span>{{ balance_msg }}</span>
+          <span plain v-show="username" v-on:click="updateBalanceHandler">
+            <el-button type="primary" icon="el-icon-refresh" size="small" round>更新</el-button>
+          </span>
+          <el-button plain v-show="!username" v-on:click="signUpBoxHandler">創建</el-button>
+          <el-button plain v-show="!username" v-on:click="loginBoxHandler">登入</el-button>
+          <el-button plain v-show="username" v-on:click="logoutHandler" key=99 index="/logout">登出</el-button>
+        </div>
+
+      </div>
+    </div>
+
+    <h1>{{ msg }}</h1>
+    <p>
+      Hello {{ username }}!
+    </p>
+  </body>
+  <Vmodal name="signup_box" height="400">
+    <h1>創建玩家</h1>
+    <br />
+    <el-form>
+      <el-form-item>
+        <el-input type="text" class="input_box" v-model="signup_username" placeholder="Username" clearable />
+      </el-form-item>
+      <el-form-item>
+        <el-input type="text" class="input_box" v-model="signup_nickname" placeholder="Nickname" clearable />
+      </el-form-item>
+      <el-form-item>
+        <el-input type="password" class="input_box" v-model="signup_password" placeholder="Password" clearable />
+      </el-form-item>
+      <div style="color: crimson;">
+        {{signup_message}}
+      </div>
+      <el-button plain v-on:click="signupRequestHandler">創建</el-button>
+    </el-form>
+  </Vmodal>
+  <Vmodal name="login_box" height="400">
+    <h1>登入</h1>
+    <br />
+    <el-form>
+      <el-form-item>
+        <el-input type="text" class="input_box" v-model="login_username" placeholder="Username" clearable />
+      </el-form-item>
+      <el-form-item>
+        <el-input type="password" class="input_box" v-model="login_password" placeholder="Password" clearable />
+      </el-form-item>
+      <div style="color: crimson;">
+        {{login_message}}
+      </div>
+      <el-button plain v-on:click="loginRequestHandler">登入</el-button>
+    </el-form>
+  </Vmodal>
 </div>
