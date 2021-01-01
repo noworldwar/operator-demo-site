@@ -1,20 +1,22 @@
 <template>
-  <div class="home">
-    <TopBar />
-    <Home msg="Welcome" />
-  </div>
+  <html>
+    <div class="home">
+      <!-- <TopBar /> -->
+      <Home msg="Welcome" />
+    </div>
+  </html>
 </template>
 
 <script>
 // @ is an alias to /src
-import Home from '@/components/HomeComponent/index.vue'
-import TopBar from '@/components/TopBarComponent/index.vue'
+import Home from "@/components/HomeComponent/index.vue";
+// import TopBar from '@/components/TopBarComponent/index.vue'
 
 export default {
-  name:'HomePage',
+  name: "HomePage",
   components: {
     Home,
-    TopBar,
-  }
-}
+    // TopBar,
+  },
+};
 </script>
