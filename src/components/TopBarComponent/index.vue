@@ -19,12 +19,12 @@ export default {
     };
   },
   methods: {
-      logoutRequest: function() {
-          this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
-          this.$store.commit("logout");
-          this.$router.push({path: '/'})
-      }
-  }
+    logoutRequest: function () {
+      this.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
+      this.$store.commit("logout");
+      this.$router.push({ path: "/" });
+    },
+  },
 };
 </script>
 
@@ -39,27 +39,11 @@ export default {
     text-color="#fff"
     active-text-color="#ffd04b"
     router
-    :default-active="$route.path"
+    default-active="/"
   >
-    <template v-for="(rule, index) in routes">
-      <el-submenu v-if="rule.children && rule.children.length > 0" :key="index" :index="rule.path">
-        <template slot="title">
-          <i :class="rule.icon"></i>
-          {{ rule.name }}
-        </template>
-        <el-menu-item
-          v-for="(child, index) in rule.children"
-          :key="index"
-          :index="rule.path + '/' + child.path"
-        >{{ child.name }}</el-menu-item>
-      </el-submenu>
-      <el-menu-item v-else :key="index" :index="rule.path">
-        <i :class="rule.icon"></i>
-        {{ rule.name }}
-      </el-menu-item>
-    </template>
-    <el-menu-item v-on:click="logoutRequest" key=99 index="/logout">
-      Logout
-    </el-menu-item>
+    <el-menu-item index="/"> 首頁 </el-menu-item>
+    <el-menu-item index="2"> 真人娛樂 </el-menu-item>
+    <el-menu-item index="3"> 電子遊戲 </el-menu-item>
+    <el-menu-item index="4"> 體育賽事 </el-menu-item>
   </el-menu>
 </template>
