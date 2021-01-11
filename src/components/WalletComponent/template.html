@@ -3,10 +3,10 @@
         <el-col :xs="{span: 24, offset:0 }" :sm="{span: 22, offset: 1}" :md="{span: 20, offset: 2}"
             :lg="{span: 18, offset: 3}" :xl="{span: 18, offset: 3}">
 
-            <el-alert :title="message" type="warning" show-icon v-if="message.length>0">
+            <el-alert :title="walletMsg" type="warning" show-icon v-if="walletMsg.length>0">
             </el-alert>
 
-            <template v-if="message.length==0">
+            <template v-if="walletMsg.length==0">
                 <div class="updateButton" @click="getWallet">
                     <el-button type="primary" icon="el-icon-refresh" size="small" round>更新</el-button>
                 </div>
@@ -33,7 +33,7 @@
                         <el-table :data="tranData" border style="width: 100%">
                             <el-table-column label="交易時間" width="160">
                                 <template slot-scope="scope">
-                                    <span>{{scope.row.created | formatDate}}</span>
+                                    <span>{{scope.row.created | formatDateTime}}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="amount" label="轉帳金額" width="150">
@@ -51,6 +51,9 @@
                             </el-table-column>
                             <el-table-column prop="transferID" label="交易序號">
                             </el-table-column>
+                            <div slot="empty">
+                                {{tranMsg}}
+                            </div>
                         </el-table>
                     </el-tab-pane>
 
