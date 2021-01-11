@@ -108,8 +108,8 @@ function signUpRequest(input) {
     axios
       .post(global_.apiUrl + "/player", form)
       .then(function (response) {
-        vm.$cookies.set("username", vm.username);
-        vm.$cookies.set("nickname", vm.nickname);
+        vm.$cookies.set("username", vm.signup_username);
+        vm.$cookies.set("nickname", vm.signup_nickname);
         vm.$cookies.set("token", response.data.token);
         vm.$cookies.set("balance", response.data.balance);
         input.$modal.hide("login_box");
