@@ -1,8 +1,22 @@
 <template>
   <div id="app">
+    <Header />
+    <TopBar />
     <router-view />
   </div>
 </template>
+
+<script>
+import Header from "@/components/HeaderComponent/index.vue";
+import TopBar from "@/components/TopBarComponent/index.vue";
+
+export default {
+  components: {
+    Header,
+    TopBar,
+  },
+};
+</script>
 
 <style>
 #app {

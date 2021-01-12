@@ -1,32 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import router from '../router'
+
 Vue.use(Vuex)
 
-const user = JSON.parse(sessionStorage.getItem('user'))
-const initialState = user?{status:{loggedIn:true},user:user}:{status:{loggedIn:false},user:null}
-
 export default new Vuex.Store({
-  state: initialState,
+  state: {
+    user: {
+      wallet: [],
+      balance: "",
+      nickname: Vue.prototype.$cookies.get("nickname")
+    }
+  },
   mutations: {
-    loginSuccess(state){
-      state.status = {loggedIn:true};
-      // router.push('/')
+    updateNickname(state, nickname) {
+      state.user.nickname = nickname;
+      Vue.prototype.$cookies.set("nickname", nickname);
     },
-    logout(state) {
-      state.status = {loggedIn:false};
-      sessionStorage.clear();
-      // router.push('/login')
-    }
-  },
-  actions: {
-    login(context) {
-      context.commit('loginSuccess')
+    updateBalance(state, balance) {
+      state.user.balance = balance;
     },
-    logoutAction({commit}) {
-      commit('logout')
+    updateWallet(state, wallet) {
+      state.user.wallet = wallet;
     }
-  },
-  modules: {
   }
 })

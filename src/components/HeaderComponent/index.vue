@@ -5,8 +5,6 @@ export default {
   name: "Header",
   data() {
     return {
-      nickname: this.$cookies.get("nickname"),
-      balance: this.$cookies.get("balance"),
       login_message: "",
       login_username: "",
       login_password: "",
@@ -15,6 +13,14 @@ export default {
       signup_nickname: "",
       signup_password: "",
     };
+  },
+  computed: {
+    nickname() {
+      return this.$store.state.user.nickname;
+    },
+    balance() {
+      return this.$store.state.user.balance;
+    },
   },
   methods: {
     loginRequestHandler() {
@@ -26,13 +32,8 @@ export default {
     updateBalanceHandler() {
       updateBalance(this);
     },
-    logoutHandler() {
-      logout(this);
-    },
     memberHandler(command) {
-      if (command != undefined) {
-        this.$router.push(command);
-      }
+      memberCommand(this, command);
     },
     showBox(v) {
       this.$modal.show(v);
@@ -42,8 +43,9 @@ export default {
     },
   },
   beforeMount() {
+    console.log(this.nickname);
     if (this.nickname) {
-      this.updateBalanceHandler;
+      this.updateBalanceHandler();
     }
   },
 };
@@ -69,11 +71,26 @@ function clearBoxData(input) {
 function logout(input) {
   let loading = input.$loading(loadingData);
   input.$cookies.keys().forEach((cookie) => input.$cookies.remove(cookie));
-  input.nickname = "";
+  input.$store.commit("updateNickname", "");
   if (input.$route.path != "/") {
     input.$router.push("/");
   }
   loading.close();
+}
+
+function memberCommand(input, command) {
+  if (command != undefined) {
+    switch (command) {
+      case "logout":
+        logout(input);
+        break;
+      default:
+        if (input.$route.path != command) {
+          input.$router.push(command);
+        }
+        break;
+    }
+  }
 }
 
 // api
@@ -89,11 +106,8 @@ function loginRequest(input) {
       .then(function (response) {
         if (typeof response.data != undefined) {
           input.$cookies.set("token", response.data.token);
-          input.$cookies.set("balance", response.data.balance);
-          input.$cookies.set("nickname", response.data.nickname);
-
-          input.nickname = response.data.nickname;
-          input.balance = response.data.balance;
+          input.$store.commit("updateNickname", response.data.nickname);
+          input.$store.commit("updateBalance", response.data.balance);
           input.$modal.hide("login_box");
           clearBoxData(input);
         } else {
@@ -101,6 +115,7 @@ function loginRequest(input) {
         }
       })
       .catch(function (error) {
+        console.log(error);
         input.login_message = error.response.data.error;
       })
       .finally(() => {
@@ -124,11 +139,8 @@ function signUpRequest(input) {
       .then(function (response) {
         if (typeof response.data != undefined) {
           input.$cookies.set("token", response.data.token);
-          input.$cookies.set("balance", response.data.balance);
-          input.$cookies.set("nickname", response.data.nickname);
-
-          input.nickname = response.data.nickname;
-          input.balance = response.data.balance;
+          input.$store.commit("updateNickname", response.data.nickname);
+          input.$store.commit("updateBalance", response.data.balance);
           input.$modal.hide("signup_box");
           clearBoxData(input);
         } else {
@@ -136,6 +148,7 @@ function signUpRequest(input) {
         }
       })
       .catch(function (error) {
+        console.log(error);
         input.signup_message = error.response.data.error;
       })
       .finally(() => {
@@ -155,17 +168,21 @@ function updateBalance(input) {
       },
     })
     .then(function (response) {
-      if (typeof response.data.data != undefined) {
-        response.data.data.forEach((v) => {
-          if (v.bank == "Main") {
-            input.$cookies.set("balance", v.balance);
-            input.balance = v.balance;
-          }
-        });
-      }
+      input.$store.commit("updateWallet", response.data.data);
+      response.data.data.forEach((v) => {
+        if (v.bank == "Main") {
+          input.$store.commit("updateBalance", v.balance);
+        }
+      });
     })
     .catch(function (error) {
       console.log(error);
+      input.$alert("閒置過久，請重新登入!", {
+        confirmButtonText: "回首頁",
+        callback: () => {
+          logout(input);
+        },
+      });
     })
     .finally(() => {
       loading.close();
