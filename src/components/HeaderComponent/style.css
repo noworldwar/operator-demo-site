@@ -1,37 +1,20 @@
-h3 {
-    margin: 40px 0 0;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
-  
-  body, html {
-    font-family: "Microsoft Yahei",serif;
-  }
-  
-  .title {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1.2em;
-  }
-  
-  h3{
-    margin: 0;
-    padding-left: 15px;
-  }
-  
-  button {
-    margin: 15px 15px;
-  }
-  
-  .input_box {
-    width:70%;
-   }
+.header{
+  margin: 0 15px;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input_box {
+  width:70%;
+}
+
+.top_btn{
+  margin: 15px 5px;
+}
+
+.nickname{
+  margin-right: 10px;
+}

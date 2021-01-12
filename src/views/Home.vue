@@ -1,22 +1,18 @@
 <template>
-  <html>
-    <div class="home">
-      <Header />
-      <TopBar />
-      <Home msg="Welcome" />
-      
-    </div>
-  </html>
+  <div class="homepage">
+    <Header />
+    <TopBar />
+    <Home />
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Home from "@/components/HomeComponent/index.vue";
-import Header from '@/components/HeaderComponent/index.vue';
-import TopBar from '@/components/TopBarComponent/index.vue';
+import Header from "@/components/HeaderComponent/index.vue";
+import TopBar from "@/components/TopBarComponent/index.vue";
 
 export default {
-  name: "HomePage",
   components: {
     Header,
     Home,

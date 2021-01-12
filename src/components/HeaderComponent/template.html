@@ -1,60 +1,72 @@
-<div class="hello">
-    <body>
-      <div class="container">
-        <div class="title">
-          <h2>好旺娛樂城</h2>
-          <div>
-            <span>{{ balance_msg }}</span>
-            <span plain v-show="!username" v-on:click="loginBoxHandler">
-              <el-button type="primary" size="medium" round>會員登入</el-button>
-            </span>
-            <span plain v-show="!username" v-on:click="signUpBoxHandler">
-                <el-button type="success" size="medium" round>立即註冊</el-button>
-              </span>
-              <!-- <span plain v-show="!username" v-on:click="signUpBoxHandler">
-                <el-button type="primary" icon="el-icon-refresh" size="small" round>更新</el-button>
-              </span> -->
-            <!-- <el-button plain v-show="!username" v-on:click="loginBoxHandler">登入</el-button>
-            <el-button plain v-show="!username" v-on:click="signUpBoxHandler">創建</el-button> -->
-            <el-button plain v-show="username" v-on:click="logoutHandler" key=99 index="/logout">登出</el-button>
-          </div>
-  
-        </div>
-      </div>
-    </body>
-    <Vmodal name="signup_box" height="400">
-      <h1>創建玩家</h1>
-      <br />
-      <el-form>
-        <el-form-item>
-          <el-input type="text" class="input_box" v-model="signup_username" placeholder="Username" clearable />
-        </el-form-item>
-        <el-form-item>
-          <el-input type="text" class="input_box" v-model="signup_nickname" placeholder="Nickname" clearable />
-        </el-form-item>
-        <el-form-item>
-          <el-input type="password" class="input_box" v-model="signup_password" placeholder="Password" clearable />
-        </el-form-item>
-        <div style="color: crimson;">
-          {{signup_message}}
-        </div>
-        <el-button plain v-on:click="signupRequestHandler">創建</el-button>
-      </el-form>
-    </Vmodal>
-    <Vmodal name="login_box" height="400">
-      <h1>登入</h1>
-      <br />
-      <el-form>
-        <el-form-item>
-          <el-input type="text" class="input_box" v-model="login_username" placeholder="Username" clearable />
-        </el-form-item>
-        <el-form-item>
-          <el-input type="password" class="input_box" v-model="login_password" placeholder="Password" clearable />
-        </el-form-item>
-        <div style="color: crimson;">
-          {{login_message}}
-        </div>
-        <el-button plain v-on:click="loginRequestHandler">登入</el-button>
-      </el-form>
-    </Vmodal>
+<div class="header">
+  <!-- 功能列 -->
+  <div class="title">
+    <h2>好旺娛樂城</h2>
+    <div v-if="!nickname">
+      <el-button type="primary" class="top_btn" round v-on:click="showBox('login_box')">會員登入</el-button>
+      <el-button type="success" class="top_btn" round v-on:click="showBox('signup_box')">立即註冊</el-button>
+    </div>
+    <div v-if="nickname">
+      <el-dropdown class="nickname" @command="memberHandler">
+        <el-button>
+          <i class="el-icon-user-solid"></i>
+          {{nickname}}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="/wallet">錢包中心</el-dropdown-item>
+          <el-dropdown-item>變更密碼</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <el-button type="primary" class="top_btn" round icon="el-icon-refresh" v-on:click="updateBalanceHandler">
+        {{balance}}
+      </el-button>
+
+      <el-button type="warning" class="top_btn" round v-on:click="logoutHandler">登出</el-button>
+    </div>
   </div>
+
+
+  <!-- 註冊會員 -->
+  <Vmodal name="signup_box" height="400">
+    <h1>註冊會員</h1>
+    <br />
+    <el-form>
+      <el-form-item>
+        <el-input type="text" class="input_box" v-model="signup_username" placeholder="帳號" clearable />
+      </el-form-item>
+      <el-form-item>
+        <el-input type="text" class="input_box" v-model="signup_nickname" placeholder="暱稱" clearable />
+      </el-form-item>
+      <el-form-item>
+        <el-input type="password" class="input_box" v-model="signup_password" placeholder="密碼" clearable />
+      </el-form-item>
+      <div style="color: crimson;">
+        {{signup_message}}
+      </div>
+      <el-button plain v-on:click="signupRequestHandler">註冊</el-button>
+      <el-button plain type="info" v-on:click="closeBox('signup_box')">取消</el-button>
+    </el-form>
+  </Vmodal>
+
+  <!-- 會員登入 -->
+  <Vmodal name="login_box" height="400">
+    <h1>會員登入</h1>
+    <br />
+    <el-form>
+      <el-form-item>
+        <el-input type="text" class="input_box" v-model="login_username" placeholder="帳號" clearable />
+      </el-form-item>
+      <el-form-item>
+        <el-input type="password" class="input_box" v-model="login_password" placeholder="密碼" clearable
+          @keyup.enter.native="loginRequestHandler" />
+      </el-form-item>
+      <div style="color: crimson;">
+        {{login_message}}
+      </div>
+      <el-button plain v-on:click="loginRequestHandler">登入</el-button>
+      <el-button plain type="info" v-on:click="closeBox('login_box')">取消</el-button>
+    </el-form>
+  </Vmodal>
+</div>

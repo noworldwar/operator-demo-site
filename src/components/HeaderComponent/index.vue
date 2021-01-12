@@ -3,29 +3,20 @@ import axios from "../../../node_modules/axios";
 import global_ from "../Global";
 export default {
   name: "Header",
-  props: {
-  },
   data() {
     return {
-      username: this.$cookies.get("username"),
-      balance_msg: "",
-      signup_message: "",
+      nickname: this.$cookies.get("nickname"),
+      balance: this.$cookies.get("balance"),
       login_message: "",
       login_username: "",
       login_password: "",
+      signup_message: "",
       signup_username: "",
       signup_nickname: "",
       signup_password: "",
-      is_login: this.$store.state.status.loggedIn,
     };
   },
   methods: {
-    loginBoxHandler() {
-      loginModal(this);
-    },
-    signUpBoxHandler() {
-      signUpModal(this);
-    },
     loginRequestHandler() {
       loginRequest(this);
     },
@@ -36,66 +27,88 @@ export default {
       updateBalance(this);
     },
     logoutHandler() {
-      this.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
-      this.$store.commit("logout");
-      location.reload();
+      logout(this);
+    },
+    memberHandler(command) {
+      if (command != undefined) {
+        this.$router.push(command);
+      }
+    },
+    showBox(v) {
+      this.$modal.show(v);
+    },
+    closeBox(v) {
+      this.$modal.hide(v);
     },
   },
   beforeMount() {
-    if (this.$cookies.get("balance")) {
-      showBalanceMsg(this);
+    if (this.nickname) {
+      this.updateBalanceHandler;
     }
-    console.log();
-    console.log(this.$store.state.status.loggedIn);
   },
 };
 
-function loginModal(input) {
-  return input.$modal.show("login_box");
+// common
+const loadingData = {
+  lock: true,
+  text: "Loading",
+  spinner: "el-icon-loading",
+  background: "rgba(0, 0, 0, 0.7)",
+};
+
+function clearBoxData(input) {
+  input.login_message = "";
+  input.login_username = "";
+  input.login_password = "";
+  input.signup_message = "";
+  input.signup_username = "";
+  input.signup_nickname = "";
+  input.signup_password = "";
 }
 
-function signUpModal(input) {
-  return input.$modal.show("signup_box");
+function logout(input) {
+  let loading = input.$loading(loadingData);
+  input.$cookies.keys().forEach((cookie) => input.$cookies.remove(cookie));
+  input.nickname = "";
+  if (input.$route.path != "/") {
+    input.$router.push("/");
+  }
+  loading.close();
 }
 
+// api
 function loginRequest(input) {
   const form = new FormData();
   form.append("username", input.login_username);
   form.append("password", input.login_password);
-  let vm = input;
-  console.log(input.$store.state.status.loggedIn);
+
   if (input.login_username && input.login_password) {
+    let loading = input.$loading(loadingData);
     axios
       .post(global_.apiUrl + "/login", form)
       .then(function (response) {
-        // console.log(input.$store.state.status.loggedIn);
-        // console.log(response);
-        vm.$cookies.set("username", vm.login_username);
-        // console.log(response.data.token);
         if (typeof response.data != undefined) {
-          vm.$cookies.set("token", response.data.token);
-          vm.$cookies.set("balance", response.data.balance);
-        }
+          input.$cookies.set("token", response.data.token);
+          input.$cookies.set("balance", response.data.balance);
+          input.$cookies.set("nickname", response.data.nickname);
 
-        input.$modal.hide("login_box");
-        vm.balance_msg =
-          "Welcome " +
-          response.data.nickname +
-          "! Credit: " +
-          response.data.balance;
-        input.$store.commit("loginSuccess");
-        location.reload();
+          input.nickname = response.data.nickname;
+          input.balance = response.data.balance;
+          input.$modal.hide("login_box");
+          clearBoxData(input);
+        } else {
+          input.login_message = "回傳格式錯誤";
+        }
       })
       .catch(function (error) {
-        vm.login_message = error.response.data.error;
-        // input.$store.commit("loginSuccess");
-        // vm.$cookies.set("username", vm.username);
-        // console.log(input.$store.state.status.loggedIn);
+        input.login_message = error.response.data.error;
+      })
+      .finally(() => {
+        loading.close();
       });
   } else {
-    vm.login_message = "請輸入帳號密碼";
+    input.login_message = "請輸入帳號密碼";
   }
-  return;
 }
 
 function signUpRequest(input) {
@@ -103,55 +116,59 @@ function signUpRequest(input) {
   form.append("username", input.signup_username);
   form.append("nickname", input.signup_nickname);
   form.append("password", input.signup_password);
-  let vm = input;
+
   if (input.signup_username && input.signup_nickname && input.signup_password) {
+    let loading = input.$loading(loadingData);
     axios
       .post(global_.apiUrl + "/player", form)
       .then(function (response) {
-        vm.$cookies.set("username", vm.signup_username);
-        vm.$cookies.set("nickname", vm.signup_nickname);
-        vm.$cookies.set("token", response.data.token);
-        vm.$cookies.set("balance", response.data.balance);
-        input.$modal.hide("login_box");
-        showBalanceMsg(input);
-        input.$store.commit("loginSuccess");
-        console.log(response);
-        location.reload();
+        if (typeof response.data != undefined) {
+          input.$cookies.set("token", response.data.token);
+          input.$cookies.set("balance", response.data.balance);
+          input.$cookies.set("nickname", response.data.nickname);
+
+          input.nickname = response.data.nickname;
+          input.balance = response.data.balance;
+          input.$modal.hide("signup_box");
+          clearBoxData(input);
+        } else {
+          input.signup_message = "回傳格式錯誤";
+        }
       })
       .catch(function (error) {
-        vm.signup_message = error.response.data.error;
+        input.signup_message = error.response.data.error;
+      })
+      .finally(() => {
+        loading.close();
       });
   } else {
-    vm.signup_message = "請輸入帳號、暱稱、密碼";
+    input.signup_message = "請輸入帳號、暱稱、密碼";
   }
-  return input;
-}
-
-function showBalanceMsg(input) {
-  input.balance_msg =
-    "Welcome " +
-    input.$cookies.get("username") +
-    "! Credit: " +
-    input.$cookies.get("balance");
-  return;
 }
 
 function updateBalance(input) {
-  let vm = input;
+  let loading = input.$loading(loadingData);
   axios
     .get(global_.apiUrl + "/player/wallet", {
       params: {
-        token: vm.$cookies.get("token"),
+        token: input.$cookies.get("token"),
       },
     })
     .then(function (response) {
-      if (typeof response.data.data[0].balance != undefined) {
-        vm.$cookies.set("balance", response.data.data[0].balance);
-        showBalanceMsg(input);
+      if (typeof response.data.data != undefined) {
+        response.data.data.forEach((v) => {
+          if (v.bank == "Main") {
+            input.$cookies.set("balance", v.balance);
+            input.balance = v.balance;
+          }
+        });
       }
     })
     .catch(function (error) {
       console.log(error);
+    })
+    .finally(() => {
+      loading.close();
     });
 }
 </script>
