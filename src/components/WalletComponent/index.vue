@@ -4,13 +4,12 @@ import global_ from "../Global";
 import moment from "moment";
 
 export default {
-  name: "WalletPage",
+  name: "Wallet",
   data() {
     return {
       wallet: [],
       itemWallet: [],
       tranData: [],
-      walletMsg: "",
       tranMsg: "",
       walletTab: "tab1",
       formData: {
@@ -90,7 +89,13 @@ function getWalletRequest(input) {
     .catch(function (error) {
       console.log(error);
       if (error.response) {
-        input.walletMsg = "Token失效，請重新登入:" + error.response.status;
+        input.$alert("閒置過久，請重新登入:" + error.response.status, {
+          confirmButtonText: "回首頁",
+          callback: () => {
+            input.$cookies.set("nickname", "");
+            input.$router.push("/");
+          },
+        });
       }
     })
     .finally(() => {

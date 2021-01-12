@@ -1,5 +1,5 @@
 <template>
-  <div class="wallet">
+  <div class="walletpage">
     <Header />
     <TopBar />
     <Wallet />
@@ -12,7 +12,6 @@ import TopBar from "@/components/TopBarComponent/index.vue";
 import Wallet from "@/components/WalletComponent/index.vue";
 
 export default {
-  name: "WalletPage",
   components: {
     Wallet,
     Header,

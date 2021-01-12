@@ -3,100 +3,92 @@
         <el-col :xs="{span: 24, offset:0 }" :sm="{span: 22, offset: 1}" :md="{span: 20, offset: 2}"
             :lg="{span: 18, offset: 3}" :xl="{span: 18, offset: 3}">
 
-            <el-alert :title="walletMsg" type="warning" show-icon v-if="walletMsg.length>0">
-            </el-alert>
+            <div class="updateButton" @click="getWallet">
+                <el-button type="primary" icon="el-icon-refresh" size="small" round>更新</el-button>
+            </div>
 
-            <template v-if="walletMsg.length==0">
-                <div class="updateButton" @click="getWallet">
-                    <el-button type="primary" icon="el-icon-refresh" size="small" round>更新</el-button>
-                </div>
+            <!-- 錢包列表 -->
+            <el-table :data="wallet" border style="width: 100%">
+                <el-table-column prop="bank" label="錢包">
+                </el-table-column>
+                <el-table-column prop="balance" label="餘額">
+                </el-table-column>
+                <el-table-column label="狀態">
+                    <template slot-scope="scope">
+                        <el-tag :type="scope.row.success  ? '' : 'warning'">
+                            {{scope.row.success?'正常':'異常'}}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+            </el-table>
 
-                <el-table :data="wallet" border style="width: 100%">
-                    <el-table-column prop="bank" label="錢包">
-                    </el-table-column>
-                    <el-table-column prop="balance" label="餘額">
-                    </el-table-column>
-                    <el-table-column label="狀態">
-                        <template slot-scope="scope">
-                            <el-tag :type="scope.row.success  ? '' : 'warning'">
-                                {{scope.row.success?'正常':'異常'}}
-                            </el-tag>
-                        </template>
-                    </el-table-column>
-                </el-table>
+            <br>
 
-                <br>
+            <el-tabs v-model="walletTab">
 
-                <el-tabs v-model="walletTab">
-                    <!-- tab1 交易紀錄 -->
-                    <el-tab-pane name="tab1" label="交易紀錄">
-                        <el-table :data="tranData" border style="width: 100%">
-                            <el-table-column label="交易時間" width="160">
-                                <template slot-scope="scope">
-                                    <span>{{scope.row.created | formatDateTime}}</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="amount" label="轉帳金額" width="150">
-                            </el-table-column>
-                            <el-table-column prop="fromBank" label="轉出錢包" width="100">
-                            </el-table-column>
-                            <el-table-column prop="toBank" label="轉入錢包" width="100">
-                            </el-table-column>
-                            <el-table-column label="轉帳結果" width="100">
-                                <template slot-scope="scope">
-                                    <el-tag :type="scope.row.success  ? 'success' : 'danger'">
-                                        {{scope.row.success?'成功':'失敗'}}
-                                    </el-tag>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="transferID" label="交易序號">
-                            </el-table-column>
-                            <div slot="empty">
-                                {{tranMsg}}
-                            </div>
-                        </el-table>
-                    </el-tab-pane>
-
-                    <!-- tab2 轉帳 -->
-                    <el-tab-pane name="tab2" label="轉帳">
-                        <div style="width: 350px;">
-                            <el-form :model="formData" label-width="100px">
-                                <el-form-item label="轉出錢包">
-                                    <el-select v-model="formData.fromBank" placeholder="請選轉出錢包"
-                                        @change="changeFromBank">
-                                        <el-option v-for="item in wallet" :value="item.bank">
-                                            <span class="itemBank">{{item.bank}}</span>
-                                            <span class="itemBalance">{{item.balance}}</span>
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-form-item label="轉入錢包">
-                                    <el-select v-model="formData.toBank" placeholder="請選轉入錢包">
-                                        <el-option v-for="item in itemWallet" :value="item.bank"
-                                            :disabled="item.disabled">
-                                            <span class="itemBank">{{item.bank}}</span>
-                                            <span class="itemBalance">{{item.balance}}</span>
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                                <el-form-item label="轉帳金額">
-                                    <el-input-number v-model="formData.amount" :min="0" :step="50" :max="1000">
-                                    </el-input-number>
-                                </el-form-item>
-                                <el-form-item>
-                                    <el-button type="primary" @click="postTransfer">轉帳</el-button>
-                                </el-form-item>
-                            </el-form>
+                <!-- tab1 交易紀錄 -->
+                <el-tab-pane name="tab1" label="交易紀錄">
+                    <el-table :data="tranData" border style="width: 100%">
+                        <el-table-column label="交易時間" width="160">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.created | formatDateTime}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="amount" label="轉帳金額" width="150">
+                        </el-table-column>
+                        <el-table-column prop="fromBank" label="轉出錢包" width="100">
+                        </el-table-column>
+                        <el-table-column prop="toBank" label="轉入錢包" width="100">
+                        </el-table-column>
+                        <el-table-column label="轉帳結果" width="100">
+                            <template slot-scope="scope">
+                                <el-tag :type="scope.row.success  ? 'success' : 'danger'">
+                                    {{scope.row.success?'成功':'失敗'}}
+                                </el-tag>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="transferID" label="交易序號">
+                        </el-table-column>
+                        <div slot="empty">
+                            {{tranMsg}}
                         </div>
+                    </el-table>
+                </el-tab-pane>
 
-                    </el-tab-pane>
+                <!-- tab2 轉帳 -->
+                <el-tab-pane name="tab2" label="轉帳">
+                    <div style="width: 350px;">
+                        <el-form :model="formData" label-width="100px">
+                            <el-form-item label="轉出錢包">
+                                <el-select v-model="formData.fromBank" placeholder="請選轉出錢包" @change="changeFromBank">
+                                    <el-option v-for="item in wallet" :value="item.bank" :key="item.bank">
+                                        <span class="itemBank">{{item.bank}}</span>
+                                        <span class="itemBalance">{{item.balance}}</span>
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="轉入錢包">
+                                <el-select v-model="formData.toBank" placeholder="請選轉入錢包">
+                                    <el-option v-for="item in itemWallet" :value="item.bank" :key="item.bank"
+                                        :disabled="item.disabled">
+                                        <span class="itemBank">{{item.bank}}</span>
+                                        <span class="itemBalance">{{item.balance}}</span>
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="轉帳金額">
+                                <el-input-number v-model="formData.amount" :min="0" :step="50" :max="1000">
+                                </el-input-number>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="postTransfer">轉帳</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
 
-                </el-tabs>
+                </el-tab-pane>
 
-
-            </template>
+            </el-tabs>
         </el-col>
     </el-row>
-
-
 </div>
