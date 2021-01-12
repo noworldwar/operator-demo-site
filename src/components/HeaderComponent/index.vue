@@ -30,9 +30,7 @@ export default {
       logout(this);
     },
     memberHandler(command) {
-      if (command != undefined) {
-        this.$router.push(command);
-      }
+      memberfunc(this, command);
     },
     showBox(v) {
       this.$modal.show(v);
@@ -74,6 +72,21 @@ function logout(input) {
     input.$router.push("/");
   }
   loading.close();
+}
+
+function memberfunc(input, command) {
+  if (command != undefined) {
+    switch (command) {
+      case "logout":
+        logout(input);
+        break;
+      default:
+        if (input.$route.path != command) {
+          input.$router.push(command);
+        }
+        break;
+    }
+  }
 }
 
 // api

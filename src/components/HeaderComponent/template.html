@@ -1,35 +1,54 @@
 <div class="header">
+
+  <el-row type="flex">
+    <el-col :xs="9" :sm="6" :md="4" :lg="4" :xl="4" style="text-align:left">
+      <h2>好旺娛樂城</h2>
+    </el-col>
+    <el-col :xs="15" :sm="18" :md="20" :lg="20" :xl="20" style="text-align: right;">
+
+      <div v-if="!nickname">
+        <el-button type="primary" class="top_btn" round v-on:click="showBox('login_box')">會員登入</el-button>
+        <el-button type="success" class="top_btn" round v-on:click="showBox('signup_box')">立即註冊</el-button>
+      </div>
+      <div v-if="nickname">
+
+
+        <el-button type="primary" class="top_btn" round icon="el-icon-refresh" v-on:click="updateBalanceHandler">
+          $
+          {{balance}}
+        </el-button>
+
+        <el-dropdown class="nickname" @command="memberHandler">
+          <el-button>
+            <i class="el-icon-user-solid"></i>
+
+            {{nickname}}
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="/wallet">錢包中心</el-dropdown-item>
+            <el-dropdown-item>變更密碼</el-dropdown-item>
+            <el-dropdown-item command="logout" divided>登出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+      </div>
+    </el-col>
+
+
+    </el-col>
+
+  </el-row>
+
   <!-- 功能列 -->
   <div class="title">
-    <h2>好旺娛樂城</h2>
-    <div v-if="!nickname">
-      <el-button type="primary" class="top_btn" round v-on:click="showBox('login_box')">會員登入</el-button>
-      <el-button type="success" class="top_btn" round v-on:click="showBox('signup_box')">立即註冊</el-button>
-    </div>
-    <div v-if="nickname">
-      <el-dropdown class="nickname" @command="memberHandler">
-        <el-button>
-          <i class="el-icon-user-solid"></i>
-          {{nickname}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="/wallet">錢包中心</el-dropdown-item>
-          <el-dropdown-item>變更密碼</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
 
-      <el-button type="primary" class="top_btn" round icon="el-icon-refresh" v-on:click="updateBalanceHandler">
-        {{balance}}
-      </el-button>
 
-      <el-button type="warning" class="top_btn" round v-on:click="logoutHandler">登出</el-button>
-    </div>
   </div>
 
 
   <!-- 註冊會員 -->
-  <Vmodal name="signup_box" height="400">
+  <Vmodal name="signup_box" height="400" width="380">
     <h1>註冊會員</h1>
     <br />
     <el-form>
@@ -51,7 +70,7 @@
   </Vmodal>
 
   <!-- 會員登入 -->
-  <Vmodal name="login_box" height="400">
+  <Vmodal name="login_box" height="300" width="380">
     <h1>會員登入</h1>
     <br />
     <el-form>

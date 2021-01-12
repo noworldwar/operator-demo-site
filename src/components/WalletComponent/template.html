@@ -2,13 +2,8 @@
     <el-row>
         <el-col :xs="{span: 24, offset:0 }" :sm="{span: 22, offset: 1}" :md="{span: 20, offset: 2}"
             :lg="{span: 18, offset: 3}" :xl="{span: 18, offset: 3}">
-
-            <div class="updateButton" @click="getWallet">
-                <el-button type="primary" icon="el-icon-refresh" size="small" round>更新</el-button>
-            </div>
-
             <!-- 錢包列表 -->
-            <el-table :data="wallet" border style="width: 100%">
+            <el-table :data="wallet" border class="walletTable">
                 <el-table-column prop="bank" label="錢包">
                 </el-table-column>
                 <el-table-column prop="balance" label="餘額">
