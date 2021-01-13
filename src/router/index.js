@@ -17,6 +17,11 @@ const routes = [
     component: () => import("../views/Wallet.vue"),
   },
   {
+    path: '/live',
+    name: 'Live',
+    component: () => import("../views/Live.vue"),
+  },
+  {
     path: "*",
     name:"page404",
     component: () => import("../views/Page404.vue"),

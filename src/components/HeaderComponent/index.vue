@@ -43,7 +43,6 @@ export default {
     },
   },
   beforeMount() {
-    console.log(this.nickname);
     if (this.nickname) {
       this.updateBalanceHandler();
     }
