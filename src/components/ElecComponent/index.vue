@@ -89,6 +89,11 @@ const loadingData = {
 
 // api
 function gameURLRequest(input, gp, gameid) {
+  if (!input.$cookies.get("token")) {
+    input.$alert("請先登入!", { confirmButtonText: "明白了" });
+    return;
+  }
+
   let loading = input.$loading(loadingData);
   axios
     .get(global_.apiUrl + "/gamelink", {
@@ -106,6 +111,7 @@ function gameURLRequest(input, gp, gameid) {
       input.$alert("閒置過久，請重新登入!", {
         confirmButtonText: "明白了",
         callback: () => {
+          input.$cookies.remove("token");
           input.$store.commit("updateNickname", "");
         },
       });

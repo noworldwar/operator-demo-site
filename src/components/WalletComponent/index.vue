@@ -101,6 +101,7 @@ function getWalletRequest(input) {
       input.$alert("閒置過久，請重新登入!", {
         confirmButtonText: "回首頁",
         callback: () => {
+          input.$cookies.remove("token");
           input.$store.commit("updateNickname", "");
           input.$router.push("/");
         },
