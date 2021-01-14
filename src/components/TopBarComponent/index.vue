@@ -19,7 +19,7 @@ export default {
   >
     <el-menu-item index="/"> 首頁 </el-menu-item>
     <el-menu-item index="/live"> 真人娛樂 </el-menu-item>
-    <el-menu-item index="/3"> 電子遊戲 </el-menu-item>
-    <el-menu-item index="/4"> 體育賽事 </el-menu-item>
+    <el-menu-item index="/elec"> 電子遊戲 </el-menu-item>
+    <el-menu-item index="/sbg"> 體育賽事 </el-menu-item>
   </el-menu>
 </template>
