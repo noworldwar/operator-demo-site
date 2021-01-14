@@ -75,7 +75,7 @@ function logout(input) {
   input.$store.commit("updateNickname", "");
 
   switch (input.$route.path) {
-    case "/wallet":
+    case ("/wallet", "/password"):
       input.$router.push("/");
       break;
   }
