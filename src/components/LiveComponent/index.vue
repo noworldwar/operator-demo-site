@@ -2,7 +2,7 @@
 import axios from "../../../node_modules/axios";
 import global_ from "../Global";
 export default {
-  name: "Home",
+  name: "Live",
   data() {
     return {
       items: [

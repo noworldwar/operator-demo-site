@@ -22,6 +22,16 @@ const routes = [
     component: () => import("../views/Live.vue"),
   },
   {
+    path: '/elec',
+    name: 'Elec',
+    component: () => import("../views/Elec.vue"),
+  },
+  {
+    path: '/sbg',
+    name: 'SBG',
+    component: () => import("../views/SBG.vue"),
+  },
+  {
     path: "*",
     name:"page404",
     component: () => import("../views/Page404.vue"),
