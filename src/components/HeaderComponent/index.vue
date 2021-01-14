@@ -52,12 +52,6 @@ export default {
 };
 
 // common
-const loadingData = {
-  lock: true,
-  text: "Loading",
-  spinner: "el-icon-loading",
-  background: "rgba(0, 0, 0, 0.7)",
-};
 
 function clearBoxData(input) {
   input.login_message = "";
@@ -70,12 +64,13 @@ function clearBoxData(input) {
 }
 
 function logout(input) {
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   input.$cookies.keys().forEach((cookie) => input.$cookies.remove(cookie));
   input.$store.commit("updateNickname", "");
 
   switch (input.$route.path) {
-    case ("/wallet", "/password"):
+    case "/wallet":
+    case "/password":
       input.$router.push("/");
       break;
   }
@@ -114,7 +109,7 @@ function loginRequest(input) {
   form.append("username", input.login_username);
   form.append("password", input.login_password);
 
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .post(global_.apiUrl + "/login", form)
     .then(function (response) {
@@ -130,7 +125,8 @@ function loginRequest(input) {
     .catch(function (error) {
       if (error.response) {
         switch (error.response.status) {
-          case (401, 404):
+          case 401:
+          case 404:
             input.login_message = "密碼錯誤";
             break;
           case 403:
@@ -170,7 +166,7 @@ function signUpRequest(input) {
   form.append("nickname", input.signup_nickname);
   form.append("password", input.signup_password);
 
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .post(global_.apiUrl + "/player", form)
     .then(function (response) {
@@ -203,7 +199,7 @@ function signUpRequest(input) {
 }
 
 function updateBalance(input) {
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .get(global_.apiUrl + "/player/wallet", {
       params: {

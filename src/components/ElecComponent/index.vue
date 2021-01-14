@@ -79,14 +79,6 @@ export default {
   },
 };
 
-// common
-const loadingData = {
-  lock: true,
-  text: "Loading",
-  spinner: "el-icon-loading",
-  background: "rgba(0, 0, 0, 0.7)",
-};
-
 // api
 function gameURLRequest(input, gp, gameid) {
   if (!input.$cookies.get("token")) {
@@ -94,7 +86,7 @@ function gameURLRequest(input, gp, gameid) {
     return;
   }
 
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .get(global_.apiUrl + "/gamelink", {
       params: {

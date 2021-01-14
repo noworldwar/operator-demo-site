@@ -49,7 +49,7 @@ function ChangePassword(input) {
     } else {
       const form = new FormData();
       form.append("token", input.$cookies.get("token"));
-      form.append("password", input.pass);
+      form.append("password", input.ruleForm.pass);
 
       let loading = input.$loading(global_.loadingConfig);
       axios

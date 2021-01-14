@@ -46,13 +46,6 @@ export default {
 };
 
 // common
-const loadingData = {
-  lock: true,
-  text: "Loading",
-  spinner: "el-icon-loading",
-  background: "rgba(0, 0, 0, 0.7)",
-};
-
 function formatDateTime(value) {
   if (value) {
     return moment(value).format("YYYY-MM-DD hh:mm:ss");
@@ -71,7 +64,7 @@ function reloadItemWallet(input) {
 
 // api
 function getWalletRequest(input) {
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .get(global_.apiUrl + "/player/wallet", {
       params: {
@@ -114,7 +107,7 @@ function getWalletRequest(input) {
 
 function getTransferRequest(input) {
   input.tranMsg = "查無資料";
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .get(global_.apiUrl + "/transfer", {
       params: {
@@ -149,7 +142,7 @@ function postTransferRequest(input) {
     return;
   }
 
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   const form = new FormData();
   form.append("fromBank", input.formData.fromBank);
   form.append("toBank", input.formData.toBank);
