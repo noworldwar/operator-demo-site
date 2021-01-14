@@ -119,7 +119,7 @@ function loginRequest(input) {
         input.$store.commit("updateBalance", response.data.balance);
         input.$modal.hide("login_box");
       } else {
-        input.login_message = "伺服器異常";
+        input.login_message = "伺服器忙碌中";
       }
     })
     .catch(function (error) {
@@ -133,11 +133,11 @@ function loginRequest(input) {
             input.login_message = "帳號已停用";
             break;
           default:
-            input.login_message = "伺服器異常";
+            input.login_message = "伺服器忙碌中";
             break;
         }
       } else {
-        input.login_message = "伺服器異常";
+        input.login_message = "伺服器忙碌中";
       }
     })
     .finally(() => {
@@ -176,7 +176,7 @@ function signUpRequest(input) {
         input.$store.commit("updateBalance", response.data.balance);
         input.$modal.hide("signup_box");
       } else {
-        input.signup_message = "伺服器異常";
+        input.signup_message = "伺服器忙碌中";
       }
     })
     .catch(function (error) {
@@ -186,11 +186,11 @@ function signUpRequest(input) {
             input.signup_message = "帳號已存在";
             break;
           default:
-            input.signup_message = "伺服器異常";
+            input.signup_message = "伺服器忙碌中";
             break;
         }
       } else {
-        input.signup_message = "伺服器異常";
+        input.signup_message = "伺服器忙碌中";
       }
     })
     .finally(() => {
@@ -215,12 +215,21 @@ function updateBalance(input) {
       });
     })
     .catch(function (error) {
-      console.log(error);
-      input.$alert("閒置過久，請重新登入!", {
-        confirmButtonText: "回首頁",
-        callback: () => {
-          logout(input);
-        },
+      if (error.response) {
+        if (error.response.status == 403) {
+          input.$alert("閒置過久，請重新登入!", {
+            confirmButtonText: "回首頁",
+            callback: () => {
+              logout(input);
+            },
+          });
+          return;
+        }
+      }
+      input.$message.error({
+        message: input.$createElement("h4", null, "更新失敗，伺服器忙碌中!"),
+        center: true,
+        showClose: true,
       });
     })
     .finally(() => {

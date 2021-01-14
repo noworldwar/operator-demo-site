@@ -63,7 +63,6 @@ function ChangePassword(input) {
           });
         })
         .catch(function (error) {
-          console.log(error);
           if (error.response) {
             if (error.response.status == 403) {
               input.$alert("閒置過久，請重新登入!", {
@@ -78,7 +77,11 @@ function ChangePassword(input) {
             }
           }
           input.$message.error({
-            message: input.$createElement("h4", null, "變更失敗，伺服器異常!"),
+            message: input.$createElement(
+              "h4",
+              null,
+              "變更失敗，伺服器忙碌中!"
+            ),
             center: true,
             showClose: true,
           });
