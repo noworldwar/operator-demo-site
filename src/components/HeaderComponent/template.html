@@ -1,12 +1,15 @@
 <div class="header">
 
   <!-- 功能列 -->
-  <el-row type="flex">
-    <el-col :xs="9" :sm="6" :md="4" :lg="4" :xl="4" style="text-align:left">
-      <h2>好旺娛樂城</h2>
+  <!-- style="width: 100px; height: 100px" -->
+  <el-row>
+    <el-col :xs="24" :sm="4" :md="4" :lg="4">
+      <router-link to="/">
+        <el-image style="width: 150px; height: 44px;margin-top: 10px;" :src="logosrc" fit="contain"></el-image>
+      </router-link>
     </el-col>
-    <el-col :xs="15" :sm="18" :md="20" :lg="20" :xl="20" style="text-align: right;">
 
+    <el-col :xs="24" :sm="{span: 8, offset: 12}" :md="{span: 7, offset: 13}" :lg="{span: 5, offset: 15}">
       <div v-if="!nickname">
         <el-button type="primary" class="top_btn" round v-on:click="showBox('login_box')">會員登入</el-button>
         <el-button type="success" class="top_btn" round v-on:click="showBox('signup_box')">立即註冊</el-button>
@@ -25,7 +28,7 @@
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="/wallet">錢包中心</el-dropdown-item>
-            <el-dropdown-item>變更密碼</el-dropdown-item>
+            <el-dropdown-item command="/password">變更密碼</el-dropdown-item>
             <el-dropdown-item command="logout" divided>登出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -34,7 +37,7 @@
   </el-row>
 
   <!-- 註冊會員 -->
-  <Vmodal name="signup_box" height="400" width="380">
+  <Vmodal name="signup_box" height="380" width="380">
     <h1>註冊會員</h1>
     <br />
     <el-form>
@@ -47,16 +50,16 @@
       <el-form-item>
         <el-input type="password" class="input_box" v-model="signup_password" placeholder="密碼" clearable />
       </el-form-item>
-      <div style="color: crimson;">
-        {{signup_message}}
-      </div>
       <el-button plain v-on:click="signupRequestHandler">註冊</el-button>
       <el-button plain type="info" v-on:click="closeBox('signup_box')">取消</el-button>
+      <div style="color: crimson;margin-top: 5px;">
+        {{signup_message}}
+      </div>
     </el-form>
   </Vmodal>
 
   <!-- 會員登入 -->
-  <Vmodal name="login_box" height="300" width="380">
+  <Vmodal name="login_box" height="310" width="380">
     <h1>會員登入</h1>
     <br />
     <el-form>
@@ -67,11 +70,11 @@
         <el-input type="password" class="input_box" v-model="login_password" placeholder="密碼" clearable
           @keyup.enter.native="loginRequestHandler" />
       </el-form-item>
-      <div style="color: crimson;">
-        {{login_message}}
-      </div>
       <el-button plain v-on:click="loginRequestHandler">登入</el-button>
       <el-button plain type="info" v-on:click="closeBox('login_box')">取消</el-button>
+      <div style="color: crimson;margin-top: 5px;">
+        {{login_message}}
+      </div>
     </el-form>
   </Vmodal>
 </div>

@@ -6,15 +6,34 @@ import moment from "moment";
 export default {
   name: "Wallet",
   data() {
+    var checkAmount = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("請輸入金額，最少1"));
+      }
+      if (!Number.isInteger(value)) {
+        callback(new Error("請輸入整數"));
+      } else {
+        callback();
+      }
+    };
     return {
       itemWallet: [],
       tranData: [],
       tranMsg: "",
       walletTab: "tab1",
-      formData: {
+      ruleForm: {
         fromBank: "",
         toBank: "",
         amount: 0,
+      },
+      rules: {
+        fromBank: [
+          { required: true, message: "請選轉出錢包", trigger: "change" },
+        ],
+        toBank: [
+          { required: true, message: "請選轉入錢包", trigger: "change" },
+        ],
+        amount: [{ validator: checkAmount, trigger: "blur" }],
       },
     };
   },
@@ -46,13 +65,6 @@ export default {
 };
 
 // common
-const loadingData = {
-  lock: true,
-  text: "Loading",
-  spinner: "el-icon-loading",
-  background: "rgba(0, 0, 0, 0.7)",
-};
-
 function formatDateTime(value) {
   if (value) {
     return moment(value).format("YYYY-MM-DD hh:mm:ss");
@@ -60,10 +72,10 @@ function formatDateTime(value) {
 }
 
 function reloadItemWallet(input) {
-  input.formData.toBank = "";
+  input.ruleForm.toBank = "";
   input.itemWallet.forEach((v) => {
     v.disabled = false;
-    if (input.formData.fromBank == v.bank) {
+    if (input.ruleForm.fromBank == v.bank) {
       v.disabled = true;
     }
   });
@@ -71,7 +83,7 @@ function reloadItemWallet(input) {
 
 // api
 function getWalletRequest(input) {
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .get(global_.apiUrl + "/player/wallet", {
       params: {
@@ -114,7 +126,7 @@ function getWalletRequest(input) {
 
 function getTransferRequest(input) {
   input.tranMsg = "查無資料";
-  let loading = input.$loading(loadingData);
+  let loading = input.$loading(global_.loadingConfig);
   axios
     .get(global_.apiUrl + "/transfer", {
       params: {
@@ -125,7 +137,6 @@ function getTransferRequest(input) {
       input.tranData = response.data.data;
     })
     .catch(function (error) {
-      console.log(error);
       if (error.response) {
         input.tranMsg = "讀取錯誤:" + error.response.status;
       }
@@ -136,38 +147,56 @@ function getTransferRequest(input) {
 }
 
 function postTransferRequest(input) {
-  if (input.formData.fromBank == "") {
-    input.$message({ message: "請選轉出錢包", type: "warning" });
-    return;
-  }
-  if (input.formData.toBank == "") {
-    input.$message({ message: "請選轉入錢包", type: "warning" });
-    return;
-  }
-  if (input.formData.amount < 1) {
-    input.$message({ message: "請輸入金額", type: "warning" });
-    return;
-  }
-
-  let loading = input.$loading(loadingData);
-  const form = new FormData();
-  form.append("fromBank", input.formData.fromBank);
-  form.append("toBank", input.formData.toBank);
-  form.append("amount", input.formData.amount);
-  form.append("token", input.$cookies.get("token"));
-  axios
-    .post(global_.apiUrl + "/transfer", form)
-    .then(function () {
-      input.$message({ message: "轉帳成功", type: "success" });
-      input.getWallet();
-    })
-    .catch(function (error) {
-      console.log(error);
-      input.$message.error("轉帳失敗:" + error.response.status);
-    })
-    .finally(() => {
-      loading.close();
-    });
+  input.$refs["ruleForm"].validate((valid) => {
+    if (!valid) {
+      return false;
+    } else {
+      let loading = input.$loading(global_.loadingConfig);
+      const form = new FormData();
+      form.append("fromBank", input.ruleForm.fromBank);
+      form.append("toBank", input.ruleForm.toBank);
+      form.append("amount", input.ruleForm.amount);
+      form.append("token", input.$cookies.get("token"));
+      axios
+        .post(global_.apiUrl + "/transfer", form)
+        .then(function () {
+          input.$message({
+            message: input.$createElement("h4", null, "轉帳成功!"),
+            type: "success",
+            center: true,
+            showClose: true,
+          });
+          input.getWallet();
+        })
+        .catch(function (error) {
+          if (error.response) {
+            if (error.response.status == 403) {
+              input.$alert("閒置過久，請重新登入!", {
+                confirmButtonText: "回首頁",
+                callback: () => {
+                  input.$cookies.remove("token");
+                  input.$store.commit("updateNickname", "");
+                  input.$router.push("/");
+                },
+              });
+              return;
+            }
+          }
+          input.$message.error({
+            message: input.$createElement(
+              "h4",
+              null,
+              "轉帳失敗，伺服器忙碌中!"
+            ),
+            center: true,
+            showClose: true,
+          });
+        })
+        .finally(() => {
+          loading.close();
+        });
+    }
+  });
 }
 </script>
 

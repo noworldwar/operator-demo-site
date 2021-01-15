@@ -1,7 +1,7 @@
 <div class="wallet">
     <el-row>
-        <el-col :xs="{span: 24, offset:0 }" :sm="{span: 22, offset: 1}" :md="{span: 20, offset: 2}"
-            :lg="{span: 18, offset: 3}" :xl="{span: 18, offset: 3}">
+        <el-col :xs="{span: 22, offset:1 }" :sm="{span: 22, offset: 1}" :md="{span: 20, offset: 2}"
+            :lg="{span: 18, offset: 3}">
             <!-- 錢包列表 -->
             <el-table :data="wallet" border class="walletTable">
                 <el-table-column prop="bank" label="錢包">
@@ -52,18 +52,20 @@
 
                 <!-- tab2 轉帳 -->
                 <el-tab-pane name="tab2" label="轉帳">
-                    <div style="width: 350px;">
-                        <el-form :model="formData" label-width="100px">
-                            <el-form-item label="轉出錢包">
-                                <el-select v-model="formData.fromBank" placeholder="請選轉出錢包" @change="changeFromBank">
+                    <div style="width: 350px;text-align: left;">
+
+
+                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+                            <el-form-item label="轉出錢包" prop="fromBank">
+                                <el-select v-model="ruleForm.fromBank" placeholder="請選轉出錢包" @change="changeFromBank">
                                     <el-option v-for="item in wallet" :value="item.bank" :key="item.bank">
                                         <span class="itemBank">{{item.bank}}</span>
                                         <span class="itemBalance">{{item.balance}}</span>
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="轉入錢包">
-                                <el-select v-model="formData.toBank" placeholder="請選轉入錢包">
+                            <el-form-item label="轉入錢包" prop="toBank">
+                                <el-select v-model="ruleForm.toBank" placeholder="請選轉入錢包">
                                     <el-option v-for="item in itemWallet" :value="item.bank" :key="item.bank"
                                         :disabled="item.disabled">
                                         <span class="itemBank">{{item.bank}}</span>
@@ -71,10 +73,11 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="轉帳金額">
-                                <el-input-number v-model="formData.amount" :min="0" :step="50" :max="1000">
+                            <el-form-item label="轉帳金額" prop="amount">
+                                <el-input-number v-model="ruleForm.amount" :min="0" :step="50" :max="1000">
                                 </el-input-number>
                             </el-form-item>
+
                             <el-form-item>
                                 <el-button type="primary" @click="postTransfer">轉帳</el-button>
                             </el-form-item>
