@@ -52,6 +52,7 @@
       </el-form-item>
       <el-button plain v-on:click="signupRequestHandler">註冊</el-button>
       <el-button plain type="info" v-on:click="closeBox('signup_box')">取消</el-button>
+      <el-button type="text" v-on:click="closeBox('signup_box');showBox('login_box');">已有帳號</el-button>
       <div style="color: crimson;margin-top: 5px;">
         {{signup_message}}
       </div>
@@ -72,6 +73,7 @@
       </el-form-item>
       <el-button plain v-on:click="loginRequestHandler">登入</el-button>
       <el-button plain type="info" v-on:click="closeBox('login_box')">取消</el-button>
+      <el-button type="text" v-on:click="closeBox('login_box');showBox('signup_box');">立即註冊</el-button>
       <div style="color: crimson;margin-top: 5px;">
         {{login_message}}
       </div>

@@ -180,6 +180,17 @@ function postTransferRequest(input) {
                 },
               });
               return;
+            } else if (error.response.status == 402) {
+              input.$message.error({
+                message: input.$createElement(
+                  "h4",
+                  null,
+                  input.ruleForm.fromBank + "錢包 餘額不足!"
+                ),
+                center: true,
+                showClose: true,
+              });
+              return;
             }
           }
           input.$message.error({
