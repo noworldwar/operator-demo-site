@@ -33,7 +33,7 @@ export default {
 // api
 function gameURLRequest(input, gp, gameid) {
   if (!input.$cookies.get("token")) {
-    input.$alert("請先登入!", { confirmButtonText: "明白了" });
+    input.$parent.$parent.showLoginBox();
     return;
   }
 

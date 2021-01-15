@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <Header ref="myHeader" />
     <TopBar />
     <router-view />
   </div>
@@ -14,6 +14,11 @@ export default {
   components: {
     Header,
     TopBar,
+  },
+  methods: {
+    showLoginBox: function () {
+      this.$refs.myHeader.showBox("login_box");
+    },
   },
 };
 </script>
