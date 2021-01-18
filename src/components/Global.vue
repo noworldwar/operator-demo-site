@@ -11,18 +11,10 @@ const loadingConfig = {
   background: "rgba(0, 0, 0, 0.7)",
 };
 
-
-const loadingData = {
-  lock: true,
-  text: "Loading",
-  spinner: "el-icon-loading",
-  background: "rgba(0, 0, 0, 0.7)",
-};
-
 // common functions
 const commonFunc = {
   gameListRequest: function (data, gameType) {
-    let loading = data.$loading(loadingData);
+    let loading = data.$loading(loadingConfig);
     axios
       .get(apiUrl + "/gamelist", {
         params: {
@@ -34,12 +26,6 @@ const commonFunc = {
       })
       .catch(function (error) {
         console.log(error);
-        data.$alert("閒置過久，請重新登入!", {
-          confirmButtonText: "明白了",
-          callback: () => {
-            data.$store.commit("updateNickname", "");
-          },
-        });
       })
       .finally(() => {
         loading.close();
@@ -102,7 +88,6 @@ function getImageUrl(path) {
 export default {
   apiUrl,
   loadingConfig,
-  loadingData,
   commonFunc,
 };
 </script>
