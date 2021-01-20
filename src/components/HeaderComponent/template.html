@@ -37,46 +37,50 @@
   </el-row>
 
   <!-- 註冊會員 -->
-  <Vmodal name="signup_box" height="380" width="380">
-    <h1>註冊會員</h1>
-    <br />
-    <el-form>
-      <el-form-item>
-        <el-input type="text" class="input_box" v-model="signup_username" placeholder="帳號" clearable />
-      </el-form-item>
-      <el-form-item>
-        <el-input type="text" class="input_box" v-model="signup_nickname" placeholder="暱稱" clearable />
-      </el-form-item>
-      <el-form-item>
-        <el-input type="password" class="input_box" v-model="signup_password" placeholder="密碼" clearable />
-      </el-form-item>
-      <el-button plain v-on:click="signupRequestHandler">註冊</el-button>
-      <el-button plain type="info" v-on:click="closeBox('signup_box')">取消</el-button>
-      <el-button type="text" v-on:click="closeBox('signup_box');showBox('login_box');">已有帳號</el-button>
-      <div style="color: crimson;margin-top: 5px;">
-        {{signup_message}}
-      </div>
-    </el-form>
+  <Vmodal name="signup_box" height="400" width="450">
+    <div style="padding: 10px 12px;">
+      <h1>註冊會員</h1>
+      <br />
+      <el-form :model="signUpRuleForm" status-icon :rules="signUpRules" ref="signUpRuleForm">
+        <el-form-item prop="signup_username">
+          <el-input type="text" class="input_box" prop="signup_username" v-model="signUpRuleForm.signup_username" placeholder="帳號" autocomplete="off" />
+        </el-form-item>
+        <el-form-item prop="signup_nickname">
+          <el-input type="text" class="input_box" prop="signup_nickname" v-model="signUpRuleForm.signup_nickname" placeholder="暱稱" autocomplete="off" />
+        </el-form-item>
+        <el-form-item prop="signup_password">
+          <el-input type="password" class="input_box" prop="signup_password" v-model="signUpRuleForm.signup_password" placeholder="密碼" autocomplete="off" />
+        </el-form-item>
+        <el-button plain v-on:click="signupRequestHandler">註冊</el-button>
+        <el-button plain type="info" v-on:click="closeBox('signup_box')">取消</el-button>
+        <el-button type="text" v-on:click="closeBox('signup_box');showBox('login_box');">已有帳號</el-button>
+        <div style="color: crimson;margin-top: 5px;">
+          {{signup_message}}
+        </div>
+      </el-form>
+    </div>
   </Vmodal>
 
   <!-- 會員登入 -->
-  <Vmodal name="login_box" height="310" width="380">
-    <h1>會員登入</h1>
-    <br />
-    <el-form>
-      <el-form-item>
-        <el-input type="text" class="input_box" v-model="login_username" placeholder="帳號" clearable />
-      </el-form-item>
-      <el-form-item>
-        <el-input type="password" class="input_box" v-model="login_password" placeholder="密碼" clearable
-          @keyup.enter.native="loginRequestHandler" />
-      </el-form-item>
-      <el-button plain v-on:click="loginRequestHandler">登入</el-button>
-      <el-button plain type="info" v-on:click="closeBox('login_box')">取消</el-button>
-      <el-button type="text" v-on:click="closeBox('login_box');showBox('signup_box');">立即註冊</el-button>
-      <div style="color: crimson;margin-top: 5px;">
-        {{login_message}}
-      </div>
-    </el-form>
+  <Vmodal name="login_box" height="330" width="450">
+    <div style="padding: 10px 12px;">
+      <h1>會員登入</h1>
+      <br />
+      <el-form :model="loginRuleForm" status-icon :rules="loginRules" ref="loginRuleForm">
+        <el-form-item prop="login_username">
+          <el-input type="text" class="input_box" v-model="loginRuleForm.login_username" placeholder="帳號" clearable />
+        </el-form-item>
+        <el-form-item prop="login_password">
+          <el-input type="password" class="input_box" v-model="loginRuleForm.login_password" placeholder="密碼" clearable
+            @keyup.enter.native="loginRequestHandler" />
+        </el-form-item>
+        <el-button plain v-on:click="loginRequestHandler">登入</el-button>
+        <el-button plain type="info" v-on:click="closeBox('login_box')">取消</el-button>
+        <el-button type="text" v-on:click="closeBox('login_box');showBox('signup_box');">立即註冊</el-button>
+        <div style="color: crimson;margin-top: 5px;">
+          {{login_message}}
+        </div>
+      </el-form>
+    </div>
   </Vmodal>
 </div>

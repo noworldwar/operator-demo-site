@@ -6,13 +6,66 @@ export default {
   data() {
     return {
       login_message: "",
-      login_username: "",
-      login_password: "",
       signup_message: "",
-      signup_username: "",
-      signup_nickname: "",
-      signup_password: "",
       logosrc: require("../../assets/logo.jpg"),
+      signUpRuleForm: {
+        signup_username: "",
+        signup_nickname: "",
+        signup_password: "",
+      },
+      loginRuleForm: {
+        login_username: "",
+        login_password: "",
+      },
+      signUpRules: {
+        signup_username: [
+          { required: true, message: "請輸入帳號", trigger: "blur" },
+          {
+            min: 4,
+            max: 16,
+            message: "請輸入 4 到 16 個字元",
+            trigger: "blur",
+          },
+        ],
+        signup_nickname: [
+          { required: true, message: "請輸入暱稱", trigger: "blur" },
+          {
+            min: 4,
+            max: 16,
+            message: "請輸入 4 到 16 個字元",
+            trigger: "blur",
+          },
+        ],
+        signup_password: [
+          { required: true, message: "請輸入密碼", trigger: "blur" },
+          {
+            min: 4,
+            max: 16,
+            message: "請輸入 4 到 16 個字元",
+            trigger: "blur",
+          },
+        ],
+      },
+      loginRules: {
+        login_username: [
+          { required: true, message: "請輸入帳號", trigger: "blur" },
+          {
+            min: 4,
+            max: 16,
+            message: "請輸入 4 到 16 個字元",
+            trigger: "blur",
+          },
+        ],
+        login_password: [
+          { required: true, message: "請輸入密碼", trigger: "blur" },
+          {
+            min: 4,
+            max: 16,
+            message: "請輸入 4 到 16 個字元",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -55,12 +108,12 @@ export default {
 
 function clearBoxData(input) {
   input.login_message = "";
-  input.login_username = "";
-  input.login_password = "";
+  input.loginRuleForm.login_username = "";
+  input.loginRuleForm.login_password = "";
   input.signup_message = "";
-  input.signup_username = "";
-  input.signup_nickname = "";
-  input.signup_password = "";
+  input.signUpRuleForm.signup_username = "";
+  input.signUpRuleForm.signup_nickname = "";
+  input.signUpRuleForm.signup_password = "";
 }
 
 function logout(input) {
@@ -95,107 +148,94 @@ function memberCommand(input, command) {
 
 // api
 function loginRequest(input) {
-  if (!input.login_username) {
-    input.login_message = "請輸入[帳號]";
-    return;
-  }
+  input.$refs["loginRuleForm"].validate((valid) => {
+    if (!valid) {
+      return false;
+    } else {
+      const form = new FormData();
+      form.append("username", input.loginRuleForm.login_username);
+      form.append("password", input.loginRuleForm.login_password);
 
-  if (!input.login_password) {
-    input.login_message = "請輸入[密碼]";
-    return;
-  }
-
-  const form = new FormData();
-  form.append("username", input.login_username);
-  form.append("password", input.login_password);
-
-  let loading = input.$loading(global_.loadingConfig);
-  axios
-    .post(global_.apiUrl + "/login", form)
-    .then(function (response) {
-      if (response.data) {
-        input.$cookies.set("token", response.data.token);
-        input.$store.commit("updateNickname", response.data.nickname);
-        input.$store.commit("updateBalance", response.data.balance);
-        input.$modal.hide("login_box");
-      } else {
-        input.login_message = "伺服器忙碌中";
-      }
-    })
-    .catch(function (error) {
-      if (error.response) {
-        switch (error.response.status) {
-          case 401:
-          case 404:
-            input.login_message = "密碼錯誤";
-            break;
-          case 403:
-            input.login_message = "帳號已停用";
-            break;
-          default:
+      let loading = input.$loading(global_.loadingConfig);
+      axios
+        .post(global_.apiUrl + "/login", form)
+        .then(function (response) {
+          if (response.data) {
+            input.$cookies.set("token", response.data.token);
+            input.$store.commit("updateNickname", response.data.nickname);
+            input.$store.commit("updateBalance", response.data.balance);
+            input.$modal.hide("login_box");
+          } else {
             input.login_message = "伺服器忙碌中";
-            break;
-        }
-      } else {
-        input.login_message = "伺服器忙碌中";
-      }
-    })
-    .finally(() => {
-      loading.close();
-    });
+          }
+        })
+        .catch(function (error) {
+          if (error.response) {
+            switch (error.response.status) {
+              case 401:
+              case 404:
+                input.login_message = "密碼錯誤";
+                break;
+              case 403:
+                input.login_message = "帳號已停用";
+                break;
+              default:
+                input.login_message = "伺服器忙碌中";
+                break;
+            }
+          } else {
+            input.login_message = "伺服器忙碌中";
+          }
+        })
+        .finally(() => {
+          loading.close();
+        });
+    }
+  });
 }
 
 function signUpRequest(input) {
-  if (!input.signup_username) {
-    input.signup_message = "請輸入[帳號]";
-    return;
-  }
+  input.$refs["signUpRuleForm"].validate((valid) => {
+    if (!valid) {
+      return false;
+    } else {
+      const form = new FormData();
+      form.append("username", input.signUpRuleForm.signup_username);
+      form.append("nickname", input.signUpRuleForm.signup_nickname);
+      form.append("password", input.signUpRuleForm.signup_password);
 
-  if (!input.signup_password) {
-    input.signup_message = "請輸入[密碼]";
-    return;
-  }
-
-  if (!input.signup_nickname) {
-    input.signup_message = "請輸入[暱稱]";
-    return;
-  }
-
-  const form = new FormData();
-  form.append("username", input.signup_username);
-  form.append("nickname", input.signup_nickname);
-  form.append("password", input.signup_password);
-
-  let loading = input.$loading(global_.loadingConfig);
-  axios
-    .post(global_.apiUrl + "/player", form)
-    .then(function (response) {
-      if (response.data) {
-        input.$cookies.set("token", response.data.token);
-        input.$store.commit("updateNickname", response.data.nickname);
-        input.$store.commit("updateBalance", response.data.balance);
-        input.$modal.hide("signup_box");
-      } else {
-        input.signup_message = "伺服器忙碌中";
-      }
-    })
-    .catch(function (error) {
-      if (error.response) {
-        switch (error.response.status) {
-          case 409:
-            input.signup_message = "帳號已存在";
-            break;
-          default:
+      let loading = input.$loading(global_.loadingConfig);
+      axios
+        .post(global_.apiUrl + "/player", form)
+        .then(function (response) {
+          if (response.data) {
+            input.$cookies.set("token", response.data.token);
+            input.$store.commit("updateNickname", response.data.nickname);
+            input.$store.commit("updateBalance", response.data.balance);
+            input.$modal.hide("signup_box");
+          } else {
             input.signup_message = "伺服器忙碌中";
-            break;
-        }
-      } else {
-        input.signup_message = "伺服器忙碌中";
-      }
-    })
-    .finally(() => {
-      loading.close();
-    });
+          }
+        })
+        .catch(function (error) {
+          if (error.response) {
+            switch (error.response.status) {
+              case 409:
+                input.signup_message = "帳號已存在";
+                break;
+              default:
+                input.signup_message = "伺服器忙碌中";
+                break;
+            }
+          } else {
+            input.signup_message = "伺服器忙碌中";
+          }
+        })
+        .finally(() => {
+          loading.close();
+        });
+    }
+  });
 }
 
 function updateBalance(input) {
