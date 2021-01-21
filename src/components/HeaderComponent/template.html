@@ -37,19 +37,22 @@
   </el-row>
 
   <!-- 註冊會員 -->
-  <Vmodal name="signup_box" height="55%" width="70%">
+  <Vmodal name="signup_box" height="400" width="360">
     <div style="padding: 10px 12px;">
       <h1>註冊會員</h1>
       <br />
       <el-form :model="signUpRuleForm" status-icon :rules="signUpRules" ref="signUpRuleForm">
         <el-form-item prop="signup_username">
-          <el-input type="text" class="input_box" prop="signup_username" v-model="signUpRuleForm.signup_username" placeholder="帳號" autocomplete="off" />
+          <el-input type="text" class="input_box" prop="signup_username" v-model="signUpRuleForm.signup_username"
+            placeholder="帳號" autocomplete="off" />
         </el-form-item>
         <el-form-item prop="signup_nickname">
-          <el-input type="text" class="input_box" prop="signup_nickname" v-model="signUpRuleForm.signup_nickname" placeholder="暱稱" autocomplete="off" />
+          <el-input type="text" class="input_box" prop="signup_nickname" v-model="signUpRuleForm.signup_nickname"
+            placeholder="暱稱" autocomplete="off" />
         </el-form-item>
         <el-form-item prop="signup_password">
-          <el-input type="password" class="input_box" prop="signup_password" v-model="signUpRuleForm.signup_password" placeholder="密碼" autocomplete="off" />
+          <el-input type="password" class="input_box" prop="signup_password" v-model="signUpRuleForm.signup_password"
+            placeholder="密碼" autocomplete="off" />
         </el-form-item>
         <el-button plain v-on:click="signupRequestHandler">註冊</el-button>
         <el-button plain type="info" v-on:click="closeBox('signup_box')">取消</el-button>
@@ -62,7 +65,7 @@
   </Vmodal>
 
   <!-- 會員登入 -->
-  <Vmodal name="login_box" height="45%" width="70%">
+  <Vmodal name="login_box" height="330" width="360">
     <div style="padding: 10px 12px;">
       <h1>會員登入</h1>
       <br />
