@@ -30,9 +30,8 @@ export default {
         signup_nickname: [
           { required: true, message: "請輸入暱稱", trigger: "blur" },
           {
-            min: 4,
-            max: 16,
-            message: "請輸入 4 到 16 個字元",
+            max: 10,
+            message: "請輸入最多 10 個字元",
             trigger: "blur",
           },
         ],
@@ -49,21 +48,9 @@ export default {
       loginRules: {
         login_username: [
           { required: true, message: "請輸入帳號", trigger: "blur" },
-          {
-            min: 4,
-            max: 16,
-            message: "請輸入 4 到 16 個字元",
-            trigger: "blur",
-          },
         ],
         login_password: [
           { required: true, message: "請輸入密碼", trigger: "blur" },
-          {
-            min: 4,
-            max: 16,
-            message: "請輸入 4 到 16 個字元",
-            trigger: "blur",
-          },
         ],
       },
     };
