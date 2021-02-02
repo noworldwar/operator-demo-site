@@ -1,11 +1,15 @@
 <script>
 export default {
   name: "TopBar",
+  computed: {
+    nickname() {
+      return this.$store.state.user.nickname;
+    },
+  },
 };
 </script>
 
-<style scoped>
-</style>
+<style src="./style.css" scoped></style>
 
 <template>
   <el-menu
@@ -21,5 +25,6 @@ export default {
     <el-menu-item index="/live"> 真人娛樂 </el-menu-item>
     <el-menu-item index="/elec"> 電子遊戲 </el-menu-item>
     <el-menu-item index="/sbg"> 體育賽事 </el-menu-item>
+    <el-menu-item index="/wallet" v-if="nickname" style="color:#ff2323;font-weight:bold;"> 錢包中心 </el-menu-item>
   </el-menu>
 </template>
