@@ -199,6 +199,7 @@ function signUpRequest(input) {
             input.$cookies.set("token", response.data.token);
             input.$store.commit("updateNickname", response.data.nickname);
             input.$store.commit("updateBalance", response.data.balance);
+            input.$router.push("/wallet");
             input.$modal.hide("signup_box");
           } else {
             input.signup_message = "伺服器忙碌中";
