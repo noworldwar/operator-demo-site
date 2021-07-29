@@ -2,7 +2,7 @@
 import axios from "../../node_modules/axios";
 
 // common parameters
-const apiUrl = "http://13.113.246.164:7901";
+const apiUrl = "http://localhost:7901";
 
 const loadingConfig = {
   lock: true,
