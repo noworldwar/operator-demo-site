@@ -67,12 +67,7 @@ export default {
 // common
 function formatDateTime(value) {
   if (value) {
-    console.log("date_value: ",value)
-    console.log("moment_date: ",moment.unix(value).format('YYYY-MM-DD hh:mm:ss'))
-
     return moment.unix(value).format('YYYY-MM-DD hh:mm:ss')
-
-    // return moment(value).format("YYYY-MM-DD hh:mm:ss");
   }
 }
 
