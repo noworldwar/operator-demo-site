@@ -67,7 +67,10 @@ export default {
 // common
 function formatDateTime(value) {
   if (value) {
-    return moment(value).format("YYYY-MM-DD hh:mm:ss");
+    var duration = moment.duration(value, 'seconds');
+    return duration.format("YYYY-MM-DD hh:mm:ss");
+
+    // return moment(value).format("YYYY-MM-DD hh:mm:ss");
   }
 }
 
